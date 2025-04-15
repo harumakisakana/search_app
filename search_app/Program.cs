@@ -8,15 +8,23 @@ class Search
         Console.WriteLine("検索内容");
         string words = Console.ReadLine().ToString();
         //Console.WriteLine(words);
-        Console.WriteLine(Directory.GetCurrentDirectory());
         var f = new OFile();
         f.Root = Directory.GetCurrentDirectory();
         var file = new FileInfo(f.Root);
-        Console.WriteLine(file.Exists);
-        //try
-       // {
-       //     using(var reader=new StreamReader()) { }
-        //}
+        //Console.WriteLine(file.Exists);
+        try
+        {
+            using (var reader = new StreamReader(f.Root)) 
+            {
+                var rgx = new Regex(".*" + words + ".*");
+                var match = rgx.Match(reader.ReadToEnd());
+                Console.WriteLine(match.Success ? match.Value : "見つかりません。");
+            }
+        }
+        catch(FileNotFoundException) 
+        {
+            Console.WriteLine("data.txtが見つかりませんでした。");
+        }
     }
 }
 
